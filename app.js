@@ -1,12 +1,16 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+const path = require('path');
 
 const feedRoutes = require("./routes/feed");
+const local = "mongodb://127.0.0.1:27017";
+const atlas = "mongodb+srv://Nabeel:PBpod0DW0YksU2O4@cluster0.8hou4.mongodb.net/SocialAppData?retryWrites=true&w=majority";
 
 const app = express();
 
 app.use(bodyParser.json());
+app.use('/images', express.static(path.join(__dirname, 'images')));
 
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -20,9 +24,16 @@ app.use((req, res, next) => {
 
 app.use("/feed", feedRoutes);
 
+app.use((error, req, res, next)=>{
+  console.log(error);
+  const status = error.statusCode || 500;
+  const message = error.message;
+  res.status(status).json({message: message});
+})
+
 mongoose
   .connect(
-    "mongodb+srv://Nabeel:PBpod0DW0YksU2O4@cluster0.8hou4.mongodb.net/max?retryWrites=true&w=majority",
+    local,
     {
       useNewUrlParser: true,
       useUnifiedTopology: true,
@@ -30,8 +41,9 @@ mongoose
   )
   .then((result) => {
     console.log('Database Connected...');
-    app.listen(8080);
+    
   })
   .catch((err) => {
     console.log(err);
   });
+  app.listen(8080);
