@@ -82,7 +82,7 @@ exports.deletePost = (req, res, next) => {
         throw error;
       }
       // Check logged in user
-      clearImage(post.imageUrl);
+      // clearImage(post.imageUrl);
       return Post.findByIdAndRemove(postId);
     })
     .then((result) => {

@@ -2,10 +2,12 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const path = require('path');
+var dotenv = require('dotenv');
+dotenv.config();
 
 const feedRoutes = require("./routes/feed");
-const local = "mongodb://127.0.0.1:27017";
-const atlas = "mongodb+srv://Nabeel:PBpod0DW0YksU2O4@cluster0.8hou4.mongodb.net/SocialAppData?retryWrites=true&w=majority";
+const local = process.env.MONGO_URI_LOCAL;
+const atlas = process.env.MONGO_URI_ATLAS;
 
 const app = express();
 
